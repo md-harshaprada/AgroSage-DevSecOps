@@ -14,3 +14,4 @@ jobs:
       - name: Set MongoDB Atlas connection string
         env:
           MONGODB_URI: ${{ secrets.MONGODB_URI }} 
+      - run: python -m flask run
