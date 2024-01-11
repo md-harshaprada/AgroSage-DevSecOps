@@ -23,3 +23,11 @@ jobs:
           registry: docker.io
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+          tags: latest # Specify the desired tag (e.g., "latest")
+
+      - name: Deploy to Render
+        run: |
+          docker run -e RENDER_TOKEN=${{ secrets.RENDER_TOKEN }} \
+                     -e RENDER_EMAIL=${{ secrets.RENDER_EMAIL }} \
+                     -e RENDER_PROJECT_ID=${{ secrets.RENDER_PROJECT_ID }} \
+                     mdharshaprada/agrosage:latest  # Use the same tag as specified during the build
