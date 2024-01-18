@@ -13,6 +13,17 @@ jobs:
           python-version: "3.9"
       - run: pip install -r requirements.txt
 
+      # Gen AI security measures
+      - name: Install Bandit
+        run: pip install bandit
+      - name: Run Bandit SAST scan
+        run: bandit -r . -ll
+      - name: Fail if vulnerabilities found
+        if: steps.bandit.outputs.exit_code != 0
+        run: |
+          echo "Vulnerabilities found by Bandit! Stopping build."
+          exit 1
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
         
