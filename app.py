@@ -6,9 +6,31 @@ import xgboost as xgb
 import pandas as pd
 import numpy as np
 from functools import wraps
+import logging
+from logging.config import dictConfig
 import os
 import pymongo
 from werkzeug.utils import secure_filename
+dictConfig({
+    'version': 1,
+    'formatters': {
+        'default': {
+            'format': '[%(asctime)s] %(levelname)s in %(module)s: %(message)s'
+        }
+    },
+    'handlers': {
+        'file': {
+            'level': 'INFO',  # Adjust level as needed
+            'class': 'logging.FileHandler',
+            'filename': 'myapp.log',  # Specify your desired log file name
+            'formatter': 'default'
+        }
+    },
+    'root': {
+        'level': 'INFO',  # Set overall logging level
+        'handlers': ['file']
+    }
+})
 
 app = Flask(__name__)
 app.secret_key = b'\xcc^\x91\xea\x17-\xd0W\x03\xa7\xf8J0\xac8\xc5'
@@ -88,6 +110,7 @@ def index():
 
 @app.route("/")    
 def home():
+    logging.info("Accessed agro sage!")
     return render_template("index.html")  
 
 @app.route("/about")
