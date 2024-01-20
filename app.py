@@ -39,7 +39,7 @@ app.secret_key = b'\xcc^\x91\xea\x17-\xd0W\x03\xa7\xf8J0\xac8\xc5'
 client = pymongo.MongoClient("mongodb+srv://SRISAILA:saila1410@cluster0.jnllygb.mongodb.net/?retryWrites=true&w=majority")
 db=client.get_database('AgroSage')
 collection = db["questions"]
-
+coll=db["persons"]
 filename = "XGBoost.pkl"
 
 ffn="xgb_pipeline.pkl"
@@ -108,11 +108,11 @@ def input():
 def index():
     return render_template("base.html")
 
-@app.route("/")    
+@app.route("/")
 def home():
-    logging.info("Accessed agro sage!")
-    return render_template("index.html")  
-
+    data = {'Date': date.today()}
+    result = coll.update_one({'Date': date.today()}, {'$inc': {'count': 1}, '$set': data}, upsert=True)
+    return render_template("index.html")
 @app.route("/about")
 def about():
     return render_template("aboutus.html")
