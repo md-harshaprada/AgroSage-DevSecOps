@@ -10,28 +10,8 @@ import logging
 from logging.config import dictConfig
 import os
 import pymongo
+from datetime import date,datetime
 from werkzeug.utils import secure_filename
-dictConfig({
-    'version': 1,
-    'formatters': {
-        'default': {
-            'format': '[%(asctime)s] %(levelname)s in %(module)s: %(message)s'
-        }
-    },
-    'handlers': {
-        'file': {
-            'level': 'INFO',  # Adjust level as needed
-            'class': 'logging.FileHandler',
-            'filename': 'myapp.log',  # Specify your desired log file name
-            'formatter': 'default'
-        }
-    },
-    'root': {
-        'level': 'INFO',  # Set overall logging level
-        'handlers': ['file']
-    }
-})
-
 app = Flask(__name__)
 app.secret_key = b'\xcc^\x91\xea\x17-\xd0W\x03\xa7\xf8J0\xac8\xc5'
 
@@ -110,8 +90,23 @@ def index():
 
 @app.route("/")
 def home():
-    data = {'Date': date.today()}
-    result = coll.update_one({'Date': date.today()}, {'$inc': {'count': 1}, '$set': data}, upsert=True)
+    logging.info("Accessed agro sage!")
+
+    # Convert date object to datetime object
+    today_datetime = datetime.combine(date.today(), datetime.min.time())
+
+    # Your data to be inserted or updated
+    data = {'Date': today_datetime}
+
+    # Use update_one with upsert=True and $inc to increment 'count'
+    result = coll.update_one({'Date': today_datetime}, {'$inc': {'count': 1}, '$set': data}, upsert=True)
+
+    # Check if the document was inserted or updated
+    if result.upserted_id is not None:
+        logging.info("Document inserted.")
+    else:
+        logging.info("Document updated.")
+
     return render_template("index.html")
 @app.route("/about")
 def about():
@@ -142,6 +137,7 @@ def fertipredict():
         pred=fertilizer_model.predict(fdata)[0]
         msg+="<b>"+"suggested fertilizer is "+str(indtoferti[pred])+"</b>"
         return msg
+
 @app.route("/exactpredict",methods = ['POST'])
 def predictpredicts():
     loaded_model = pickle.load(open(filename, "rb"))
@@ -223,7 +219,6 @@ def answer_question(question_id):
     upvotes=0
     collection.update_one({'_id': ObjectId(question_id)}, {'$push': {'answers': {'text': answer_text, 'user_name': user_name,'profession':profession,'upvotes':upvotes}}})
     session['message'] = 'Your Answer is posted!'
-   
     return redirect(url_for('help'))
 
 @app.route('/upvote/<question_id>/<answer_index>')
