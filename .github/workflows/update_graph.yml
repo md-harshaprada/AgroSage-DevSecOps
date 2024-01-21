@@ -1,0 +1,26 @@
+name: Update Graph
+
+on:
+  schedule:
+    - cron: '0 */12 * * *'  # Run every 12 hours
+
+jobs:
+  update-graph:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pandas matplotlib pymongo
+
+    - name: Run script
+      run: python ./update_graph.py
