@@ -223,17 +223,10 @@ def answer_question(question_id):
 
 @app.route('/upvote/<question_id>/<answer_index>')
 def upvote_answer(question_id, answer_index):
-    # Convert answer_index to an integer
     answer_index = int(answer_index)
-    
-    # Find the question and answer
     question = collection.find_one({'_id': ObjectId(question_id)})
     answer = question['answers'][answer_index]
-
-    # Increment the upvotes for the answer
     answer['upvotes'] += 1
-
-    # Update the document in the database
     collection.update_one({'_id': ObjectId(question_id)}, {'$set': {'answers': question['answers']}})
 
     return redirect(url_for('help'))
