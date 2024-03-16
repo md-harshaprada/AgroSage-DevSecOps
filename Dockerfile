@@ -18,4 +18,5 @@ WORKDIR /app
 EXPOSE 5000
 
 # Command to run on container start (using Gunicorn WSGI server)
-CMD ["gunicorn", "-b", "0.0.0.0:5000", "app:app"]  # Assuming your app's entry point is in app.py
+CMD ["gunicorn", "-b", "0.0.0.0:5000", "app:app"] 
+# Assuming your app's entry point is in app.py
