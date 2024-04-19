@@ -1,6 +1,5 @@
 import json
 import os
-import matplotlib.pyplot as plt
 
 def analyze_threat_intelligence(file_path):
     with open(file_path, 'r', encoding='utf-8') as f:
@@ -38,16 +37,7 @@ def analyze_threat_intelligence(file_path):
         print(f"Total CVEs: {total_cves}")
         print(f"Total XSS Vulnerabilities: {total_xss_vulnerabilities}")
         print(f"Total Authentication Bypass Vulnerabilities: {total_authentication_bypass_vulnerabilities}")
-        
-        # Create a bar chart
-        categories = ['Total CVEs', 'XSS Vulnerabilities', 'Authentication Bypass Vulnerabilities']
-        counts = [total_cves, total_xss_vulnerabilities, total_authentication_bypass_vulnerabilities]
-        plt.figure(figsize=(10, 6))
-        plt.bar(categories, counts, color=['blue', 'orange', 'green'])
-        plt.xlabel('Categories')
-        plt.ylabel('Counts')
-        plt.title('CVE Statistics')
-        plt.savefig('CVE_statistics.png')
+
 
 if __name__ == "__main__":
     import sys
