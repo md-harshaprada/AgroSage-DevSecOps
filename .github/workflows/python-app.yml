@@ -64,7 +64,7 @@ jobs:
           context: .
           file: ./Dockerfile 
           push: true
-          tags: mdharshaprada/agrosage:latest
+          tags: harshaprada/agrosage:latest
 
       # Docker Scout Scan
       - name: Docker Scout Scan
