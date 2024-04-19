@@ -35,7 +35,7 @@ jobs:
         run: |
           bandit -r . -lll -iii
 
-      # Run Bandit SAST scan
+      # Run Bandit SAST Scan
       - name: Run Bandit SAST scan
         run: bandit -r . -lll -iii
 
